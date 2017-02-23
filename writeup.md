@@ -37,19 +37,29 @@ I start by preparing "object points", which will be the (x, y, z) coordinates of
 
 I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
 
-![alt text][image1]
+![][image1]
 
-###Pipeline (single images)
+##Pipeline (single images)
 
-####1. Provide an example of a distortion-corrected image.
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
-![alt text][image2]
-####2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+####1. Distortion correction
+I used cv2.undistort using the caluclated M.
+This is shown in the second code cell in P2.ipynb.
+You can see the before and after here:
 
-![alt text][image3]
+TODO:![][image2]
 
-####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
+
+####2. Color transform
+See the third code cell in P2.ipynb.
+I converted the image to HSV using opencv cvtColor.
+Then I took the S channel and thresholded it.
+Then I took sobel gradient and thresholded angle.
+Here's an example of my output for this step:
+
+TODO:
+![][image3]
+
+####3. Perspective transform
 
 The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
 
