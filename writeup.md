@@ -1,7 +1,7 @@
 # Advanced Lane Finding Project
 The goals of this project are:
 
-* **Camera calibration.** Compute camera calibration matrix and distortion coefficients from a set of chessboard images.
+* **Camera calibration.** Compute calibration matrix, distortion coefficients from a set of chessboard images.
 * **Distortion correction.** Apply a distortion correction to raw images.
 * **Color transforms.** Use color transforms, gradients, etc., to create a thresholded binary image.
 * **Perspective transforms.** Apply a perspective transform to rectify binary image ("birds-eye view").
@@ -12,12 +12,12 @@ The goals of this project are:
 
 
 ### The Code
-**All** of the code for this project is contained in code cells in **"P2.ipynb".**. It is written as an exploratory walkthrough.
+**All** of the code for this project is contained in code cells in **"P2.ipynb"**. It is written as an exploratory walkthrough.
 
 
 ### Camera Calibration
 
-I want to compute the distortion of the camera, so I started by calibrating the camera to a chessboard, by first preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image. Then, `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection. I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.
+I want to compute the distortion of the camera, so I started by calibrating the camera to a chessboard, by first preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image. Then, `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection. I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients (**m**) using the `cv2.calibrateCamera()` function.
 
 # The Pipeline
 
@@ -31,11 +31,10 @@ I used cv2.undistort(), using the caluclated M. You can see the before and after
 #### 2. Color transform
 
 I convert the image to HLS space and threshold the S channel.
-I Sobel gradient kernel size 3 x and y and direction and magnitude.
 
 ![](./output_images/02_threshold.png)
 
-I stack them to see the individual contributions, then combine the result.
+Then I take Sobel gradients, with kernel size 3, on x and y, and calculate direction and magnitude. I stacked them to see the individual contributions, then combined the result.
 
 ![](./output_images/03_pixels.png)
 
@@ -45,41 +44,41 @@ I use `cv2.warpPerspective()` to warp the image into a bird's eye view.
 It uses source (`src`) and destination (`dest`) points. I verified that my perspective transform was working as expected by drawing the `src` and `dest` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image:
 ![](./output_images/04_warp.png)
 
-#### Identify pixels
+#### 4. Identify pixels
 
-To find the lanes, I find which pixels in the warped image are likely lanes.
+To find the lanes, I find which pixels in the warped image are the lanes.
 
 ![](./output_images/08_lane_pixels.png)
 
-The final pipeline process looks like this.
+The final pipeline process from original image to undistorted, thresholded, perspective warped image looks like this:
 ![](./output_images/05_pipeline.png)
 
-#### Histogram
+#### 5. Histogram
 
-To start detecing lanes, I take a histogram of the warped and thresholded image, to find the peaks of lane pixels.
+To start detecing lanes, I take a histogram of the undistorted, thresholded and warped image, to find the peaks of lane pixels.
 
 ![](./output_images/06_histogram.png)
 
-Then I move two windows up from the bottom of the image, centered on the two centre high points of the histogram. 
+Then I use a sliding window algorithm. I move two windows up from the bottom of the image, centered on the two centre high points of the histogram:
 ![](./output_images/07_windows.png)
 
-#### Fit a curve
+#### 6. Fit a curve
 
-Then I fit a second order polynomial to the two lane pixel collections.
+Then, I fit a second order polynomial to the two lane pixel collections.
 ![](./output_images/09_lanes.png)
+![](./output_images/10_lane_lines.png)
 
-#### Calculate Curve Radius
+
+#### 7. Calculate Curve Radius
 
 Then I calculate the radius of curviture of both lanes.
 
-![](./output_images/11_curved_lanes.png)
-![](./output_images/10_lane_lines.png)
+![](./output_images/12_fill_road.png)
 
-#### Fill the road surface
+#### 8. Fill the road surface
 
 Then I fill in a polygon in between the two caluclated lane curves and overlay it over the original undistorted image.
 
-![](./output_images/12_fill_road.png)
 
 ![](./output_images/13_green_road.png)
 
