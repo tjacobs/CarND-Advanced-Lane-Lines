@@ -89,7 +89,3 @@ Then I fill in a polygon in between the two calculated lane curves and overlay i
 Here's [the final output video](./project_video.mp4).
 
 ---
-
-### Discussion
-
-It works pretty well.
