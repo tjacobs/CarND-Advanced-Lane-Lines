@@ -24,10 +24,11 @@ I want to compute the distortion of the camera, so I started by calibrating the 
 Having calculated the camera distortion values, the pipeline for each frame is a series of steps:
 
 #### 1. Distortion correction
+
 I used cv2.undistort(), using the caluclated M. You can see the before and after here:
 ![](./output_images/01_undistort.png)
 
-####2. Color transform
+#### 2. Color transform
 
 I convert the image to HLS space and threshold the S channel.
 I Sobel gradient kernel size 3 x and y and direction and magnitude.
@@ -38,7 +39,8 @@ I stack them to see the individual contributions, then combine the result.
 
 ![](./output_images/03_pixels.png)
 
-####3. Perspective transform
+#### 3. Perspective transform
+
 I use `cv2.warpPerspective()` to warp the image into a bird's eye view.
 It uses source (`src`) and destination (`dest`) points. I verified that my perspective transform was working as expected by drawing the `src` and `dest` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image:
 ![](./output_images/04_warp.png)
@@ -61,12 +63,12 @@ To start detecing lanes, I take a histogram of the warped and thresholded image,
 Then I move two windows up from the bottom of the image, centered on the two centre high points of the histogram. 
 ![](./output_images/07_windows.png)
 
-####5. Fit a curve
+#### Fit a curve
 
 Then I fit a second order polynomial to the two lane pixel collections.
 ![](./output_images/09_lanes.png)
 
-####5. Calculate Curve Radius
+#### Calculate Curve Radius
 
 Then I calculate the radius of curviture of both lanes.
 
@@ -83,12 +85,12 @@ Then I fill in a polygon in between the two caluclated lane curves and overlay i
 
 ---
 
-###Pipeline video
+### Pipeline video
 
 Here's [the final output video](./project_video.mp4).
 
 ---
 
-###Discussion
+### Discussion
 
 It works pretty well.
