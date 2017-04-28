@@ -10,23 +10,20 @@ The goals of this project are:
 * **Warp.** Warp the detected lane boundaries back onto the original image.
 * **Display.** Output display of the lane boundaries and estimation of lane curvature and vehicle position.
 
----
 
-
-# The Code
+### The Code
 **All** of the code for this project is contained in code cells in **"P2.ipynb".**. It is written as an exploratory walkthrough.
 
----
 
 ### Camera Calibration
 
 I want to compute the distortion of the camera, so I started by calibrating the camera to a chessboard, by first preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image. Then, `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection. I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.
 
-#The Pipeline
+# The Pipeline
 
 Having calculated the camera distortion values, the pipeline for each frame is a series of steps:
 
-####1. Distortion correction
+#### 1. Distortion correction
 I used cv2.undistort(), using the caluclated M. You can see the before and after here:
 ![](./output_images/01_undistort.png)
 
