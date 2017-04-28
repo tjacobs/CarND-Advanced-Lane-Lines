@@ -77,7 +77,7 @@ Then I calculate the radius of curviture of both lanes.
 
 #### 8. Fill the road surface
 
-Then I fill in a polygon in between the two caluclated lane curves and overlay it over the original undistorted image.
+Then I fill in a polygon in between the two calculated lane curves and overlay it over the original undistorted image.
 
 
 ![](./output_images/13_green_road.png)
